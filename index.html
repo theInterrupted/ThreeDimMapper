@@ -18,6 +18,23 @@
 </div>
 
 <script>
+var symbols = {
+	'circle' : {
+            'markerType': 'ellipse',
+            'markerFill': 'rgb(135,196,240)',
+            'markerFillOpacity': 1,
+            'markerLineColor': '#34495e',
+            'markerLineWidth': 3,
+            'markerLineOpacity': 1,
+            //'markerLineDasharray':[],
+            'markerWidth': 10,
+            'markerHeight': 10,
+            //'markerDx': 0,
+            //'markerDy': 0,
+            //'markerOpacity' : 1
+	}
+};
+
 
 var map = new maptalks.Map('map', {
         center: [-84.22550713006798,39.9001169544084],
@@ -54,13 +71,7 @@ new maptalks.Marker(
           draggable : false,
           dragShadow : false, // display a shadow during dragging
           drawOnAxis : null,  // force dragging stick on a axis, can be: x, y
-          symbol : {
-            'textFaceName' : 'sans-serif',
-            'textName' : 'MapTalks',
-            'textFill' : '#34495e',
-            'textHorizontalAlignment' : 'right',
-            'textSize' : 40
-          }
+          symbol : symbols.circle
         }
       ).addTo(layer);
 
