@@ -83,11 +83,13 @@ var map = new maptalks.Map('map', {
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
 
+var datarefmap = {};
+
 d3.csv("data/datalog.csv").then(function(data){
 	data.forEach(preprocess);										 
 	var timespan = d3.extent(data,d=>d.dtg);
 	xscale.domain(timespan);
-	yscale.domain(d3.extent(data,d=>d.id));
+	yscale.domain(d3.extent(data,d=>d.objectid));
 	
 	svg.append("g")
 		.attr("transform", 'translate(' + margin.left + ',' + (height - margin.bottom) + ')')
@@ -97,14 +99,15 @@ d3.csv("data/datalog.csv").then(function(data){
 		.data(data)
 		.enter()
 		.append("circle")
-			.attr("transform", d=>'translate(' + xscale(d.dtg) + ',' + yscale(d.id) + ')')
+			.attr("transform", d=>'translate(' + xscale(d.dtg) + ',' + yscale(d.objectid) + ')')
 			.attr("r", 3.5);
 	
 	data.forEach(function(d){
 		new maptalks.Marker(
+			d.dataid,
 			[d.lon,d.lat],
 			{
-			  visible : true,
+			  visible : false,
 			  cursor : 'pointer',
 			  shadowBlur : 0,
 			  shadowColor : 'black',
@@ -124,13 +127,27 @@ function brushed(){
 	if (selection === null){
 		
 	} else {
-		
+		const [x0,x1] = selection.map(xscale.invert);
+		showDataOnlyBetween(x0,x1);
 	}
+}
+
+function showDataOnlyBetween(start,end){
+	layer.filter(d=>datarefmap[d.getId()]<=start || datarefmap[d.getId()]>=end)
+		.forEach(function(feature) {
+            feature.hide();
+          });
+	
+	layer.filter(d=>datarefmap[d.getId()]>=start && datarefmap[d.getId()]<=end)
+		.forEach(function(feature) {
+            feature.show();
+          });
 }
 
 function preprocess(d){
 	d.dtg = dtgParse(d.dtg);
-	d.id = +d.id;
+	d.objectid = +d.objectid;
+	datarefmap[d.dataid] = d.dtg;
 }
 
 </script>
