@@ -104,9 +104,9 @@ d3.csv("data/datalog.csv").then(function(data){
 	
 	data.forEach(function(d){
 		new maptalks.Marker(
-			d.dataid,
 			[d.lon,d.lat],
 			{
+			  id: d.dataid,
 			  visible : false,
 			  cursor : 'pointer',
 			  shadowBlur : 0,
