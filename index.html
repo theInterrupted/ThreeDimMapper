@@ -42,8 +42,7 @@ const height = 200;
 const width = 600;
 
 const svg = d3.select(".timeline").append("svg")
-	.attr("height", height)
-	.attr("width", width);
+	.attr("viewBox", [0, 0, width, height]);
 const datalayer = svg.append("g")
 	.attr("id", "datalayer");
 
