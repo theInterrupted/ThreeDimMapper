@@ -20,7 +20,7 @@
 <script>
 var symbols = {
 	'circle' : {
-            'markerType': 'ellipse',
+            'markerType': 'ellipse', //cross,x,triangle,square,diamond,bar,pie,pin,rectangle
             'markerFill': 'rgb(135,196,240)',
             'markerFillOpacity': 1,
             'markerLineColor': '#34495e',
@@ -59,7 +59,8 @@ var map = new maptalks.Map('map', {
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
 
-//var point = 
+//var point =
+/*
 new maptalks.Marker(
         [-84.22550713006798,39.9001169544084],
         {
@@ -74,12 +75,27 @@ new maptalks.Marker(
           symbol : symbols.circle
         }
       ).addTo(layer);
+*/
 
-//d3.csv("data/datalog.csv").then(function(data){
+d3.csv("data/datalog.csv").then(function(data){
+	data.forEach(function(d){
+		new maptalks.Marker(
+			[d.lon,d.lat],
+			{
+			  visible : true,
+			  cursor : 'pointer',
+			  shadowBlur : 0,
+			  shadowColor : 'black',
+			  draggable : false,
+			  dragShadow : false, // display a shadow during dragging
+			  drawOnAxis : null,  // force dragging stick on a axis, can be: x, y
+			  symbol : symbols.circle
+			}
+		  ).addTo(layer);				  
+	});
 
 
-
-//});
+});
 
 </script>
 
