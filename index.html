@@ -18,8 +18,19 @@
 <script>
 
 var map = new maptalks.Map('map', {
-        center: [-0.113049,51.498568],
+        center: [-84.22550713006798,39.9001169544084],
         zoom: 14,
+        zoomControl: {
+          'position'  : 'top-right',
+          'slider'    : true,
+          'zoomLevel' : true
+        },
+		scaleControl: {
+          'position'  : 'bottom-right',
+          'maxWidth': 250,
+          'metric': true,
+          'imperial': true
+        },
         baseLayer: new maptalks.TileLayer('base', {
           urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
           subdomains: ['a','b','c','d'],
