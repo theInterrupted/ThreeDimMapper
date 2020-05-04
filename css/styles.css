@@ -13,6 +13,16 @@ html, body, .main-frame {
 	right: 20px;
 }
 
+.timeline svg {
+	background-color: #ddd;
+}
+
+svg circle {
+	fill: #888;
+	stroke: #000;
+	stroke-width: 1px;
+}
+
 .map-container {
 	width: 100%;
 	height: 100%;

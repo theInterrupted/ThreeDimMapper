@@ -38,8 +38,8 @@ var symbols = {
 var dtgParse = d3.utcParse("%Y-%m-%d %H:%M:%S");
 
 const margin = ({top: 10, right: 20, bottom: 20, left: 20});
-const height = 50;
-const width = 400;
+const height = 200;
+const width = 600;
 
 const svg = d3.select(".timeline").append("svg")
 	.attr("height", height)
@@ -50,6 +50,10 @@ const datalayer = svg.append("g")
 const brush = d3.brushX()
 	.extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])
     .on("start brush end", brushed);
+	
+svg.append("g")
+    .call(brush);
+//    .call(brush.move, [0, 5].map(x));
 	
 var xscale = d3.scaleUtc().range([margin.left, width - margin.right]);
 var yscale = d3.scaleLinear().range([height - margin.bottom, margin.top]);	
