@@ -85,7 +85,8 @@ d3.csv("data/datalog.csv").then(function(data){
 });
 
 function preprocess(d){
-	d.dtg = dtgParse(d.dtg);
+	let dp = dtgParse(d.dtg);
+	if (!dp) console.log("Date parse error");
 }
 
 </script>
