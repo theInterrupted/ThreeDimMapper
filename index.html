@@ -34,7 +34,7 @@ var symbols = {
             //'markerOpacity' : 1
 	}
 };
-var dtgParse = d3.parseUtc("%y-%m-%d %H:%M:%S");
+var dtgParse = d3.utcParse("%y-%m-%d %H:%M:%S");
 
 var map = new maptalks.Map('map', {
         center: [-84.22550713006798,39.9001169544084],
@@ -63,7 +63,8 @@ d3.csv("data/datalog.csv").then(function(data){
 	data.forEach(preprocess);
 										 
 	var timespan = d3.extent(data,d=>d.dtg);
-	console.log(timespan.toString()); 
+	console.log(timespan.toString());
+	
 	data.forEach(function(d){
 		new maptalks.Marker(
 			[d.lon,d.lat],
