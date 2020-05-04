@@ -51,7 +51,7 @@ const brush = d3.brushX()
 	.extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])
     .on("start brush end", brushed);
 	
-var xscale = d3.scaleLinear().range([margin.left, width - margin.right]);
+var xscale = d3.scaleUtc().range([margin.left, width - margin.right]);
 var yscale = d3.scaleLinear().range([height - margin.bottom, margin.top]);	
 
 var map = new maptalks.Map('map', {
@@ -123,8 +123,8 @@ function brushed(){
 }
 
 function preprocess(d){
-	let dp = dtgParse(d.dtg);
-	if (!dp) console.log("Date parse error");
+	d.dtg = dtgParse(d.dtg);
+	d.id = +d.id;
 }
 
 </script>
