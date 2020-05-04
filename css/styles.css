@@ -11,10 +11,11 @@ html, body, .main-frame {
 	position: absolute;
 	left: 20px;
 	right: 20px;
+	z-index: 10;
 }
 
 .timeline svg {
-	background-color: #ddd;
+	background-color: #eee;
 }
 
 svg circle {

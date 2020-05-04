@@ -38,13 +38,16 @@ var symbols = {
 var dtgParse = d3.utcParse("%Y-%m-%d %H:%M:%S");
 
 const margin = ({top: 10, right: 20, bottom: 20, left: 20});
-const height = 200;
-const width = 600;
+const height = 100;
+const width = 400;
+const dwidth = width - margin.left - margin.right;
+const dheight = height - margin.top - margin.bottom;
 
 const svg = d3.select(".timeline").append("svg")
 	.attr("viewBox", [0, 0, width, height]);
 const datalayer = svg.append("g")
-	.attr("id", "datalayer");
+	.attr("id", "datalayer")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 const brush = d3.brushX()
 	.extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])
@@ -54,8 +57,8 @@ svg.append("g")
     .call(brush);
 //    .call(brush.move, [0, 5].map(x));
 	
-var xscale = d3.scaleUtc().range([margin.left, width - margin.right]);
-var yscale = d3.scaleLinear().range([height - margin.bottom, margin.top]);	
+var xscale = d3.scaleUtc().range([0, dwidth]);
+var yscale = d3.scaleLinear().range([dheight, 0]);	
 
 var map = new maptalks.Map('map', {
         center: [-84.22550713006798,39.9001169544084],
