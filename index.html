@@ -34,7 +34,7 @@ var symbols = {
             //'markerOpacity' : 1
 	}
 };
-
+var dtgParse = d3.parseUtc("%y-%m-%d %H:%M:%S");
 
 var map = new maptalks.Map('map', {
         center: [-84.22550713006798,39.9001169544084],
@@ -59,25 +59,11 @@ var map = new maptalks.Map('map', {
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
 
-//var point =
-/*
-new maptalks.Marker(
-        [-84.22550713006798,39.9001169544084],
-        {
-          visible : true,
-          //editable : true,
-          cursor : 'pointer',
-          shadowBlur : 0,
-          shadowColor : 'black',
-          draggable : false,
-          dragShadow : false, // display a shadow during dragging
-          drawOnAxis : null,  // force dragging stick on a axis, can be: x, y
-          symbol : symbols.circle
-        }
-      ).addTo(layer);
-*/
-
 d3.csv("data/datalog.csv").then(function(data){
+	data.forEach(preprocess);
+										 
+	var timespan = d3.extent(data,d=>d.dtg);
+	console.log(timespan.toString()); 
 	data.forEach(function(d){
 		new maptalks.Marker(
 			[d.lon,d.lat],
@@ -96,6 +82,10 @@ d3.csv("data/datalog.csv").then(function(data){
 
 
 });
+
+function preprocess(d){
+	d.dtg = dtgParse(d.dtg);
+}
 
 </script>
 
