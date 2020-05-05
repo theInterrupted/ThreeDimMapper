@@ -4,8 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Data-Driven 3D Maps</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
-<script type="text/javascript" src="js/three.min.js"></script>
 <script type="text/javascript" src="js/maptalks.min.js"></script>
+<script type="text/javascript" src="js/three.min.js"></script>
 <script type="text/javascript" src="js/maptalks.three.js"></script>
 <script type="text/javascript" src="js/OBJLoader.js"></script>
 <script src="js/DDSLoader.js"></script>
@@ -94,7 +94,7 @@ var threeLayer = new maptalks.ThreeLayer('t');
 threeLayer.prepareToDraw = function (gl, scene, camera) {
 	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
 	var mtlLoader = new THREE.MTLLoader();
-	mtlLoader.setPath( 'data/' );
+	/*mtlLoader.setPath( 'data/' );
 	mtlLoader.load( 'aircraft-tractor-smol-smoothed.mtl', function( materials ) {
 		materials.preload();
 		//change to back side with THREE <= v0.94
@@ -127,17 +127,54 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 					dx: 10
 			});
 
-			/*model.on('mouseover mouseout',function(e){
+			model.on('mouseover mouseout',function(e){
 			   var scale=1;
 			   if(e.type==='mouseover'){
 				 scale=1.5;
 			   }
 			   this.getObject3d().scale.set(1,1,scale);
-			});*/
+			});
 			mtlLoaded = true;
 			threeLayer.renderScene();
 			threeLayer.config('animation',true);
 		});
+	});
+	*/
+	var objLoader = new THREE.OBJLoader();
+	//objLoader.setMaterials( materials );
+	objLoader.setPath( 'data/' );
+	objLoader.load( 'aircraft-tractor-smol-smoothed.obj', function ( object ) {
+		object.traverse( function ( child ) {
+			if ( child instanceof THREE.Mesh ) {
+			  child.scale.set(10,10,10);
+			  child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
+			}
+		});
+
+		var model = threeLayer.toModel(object,{
+			coordinate:map.getCenter(),
+			altitude:100
+		});
+
+		threeLayer.addMesh(model);
+
+		//tooltip test
+		model.setToolTip('obj model', {
+				showTimeout: 0,
+				eventsPropagation: true,
+				dx: 10
+		});
+
+		/*model.on('mouseover mouseout',function(e){
+		   var scale=1;
+		   if(e.type==='mouseover'){
+			 scale=1.5;
+		   }
+		   this.getObject3d().scale.set(1,1,scale);
+		});*/
+		mtlLoaded = true;
+		threeLayer.renderScene();
+		threeLayer.config('animation',true);
 	});
 };
 threeLayer.draw = function () {
