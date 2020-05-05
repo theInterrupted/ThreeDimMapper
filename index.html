@@ -86,11 +86,13 @@ var map = new maptalks.Map('map', {
         })
       });
 
-var layer = new maptalks.VectorLayer('vector').addTo(map);
 
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-var mtlLoaded = false;
-var threeLayer = new maptalks.ThreeLayer('t');
+var threeLayer = new maptalks.ThreeLayer('t', {
+    forceRenderOnMoving : true,
+    forceRenderOnZooming : true,
+    forceRenderOnRotating : true,
+});
 threeLayer.prepareToDraw = function (gl, scene, camera) {
 	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
 	/*
@@ -110,46 +112,31 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 		objLoader.load( 'aircraft-tractor-smol-smoothed.obj', function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
-				  child.scale.set(.5,.5,.5);
+				  child.scale.set(.005,.005,.005);
 				  child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
 				}
 			});
+			var v = threeLayer.coordinateToVector3(map.getCenter());
+			object.position.x = v.x;
+			object.position.y = v.y;
+			object.position.z = v.z;
+			
+			scene.add(object);
 
-			var model = threeLayer.toModel(object,{
-				coordinate:map.getCenter(),
-				altitude:100
-			});
-
-			threeLayer.addMesh(model);
-
-			//tooltip test
-			model.setToolTip('obj model', {
-					showTimeout: 0,
-					eventsPropagation: true,
-					dx: 10
-			});
-
-			model.on('mouseover mouseout',function(e){
-			   var scale=1;
-			   if(e.type==='mouseover'){
-				 scale=1.5;
-			   }
-			   this.getObject3d().scale.set(1,1,scale);
-			});
-			mtlLoaded = true;
 			threeLayer.renderScene();
-			threeLayer.config('animation',true);
 		});
 	//});
 };
 threeLayer.draw = function () {
-    if (mtlLoaded) {this.renderScene();}
+    this.renderScene();
 }
 threeLayer.drawOnInteracting = function () {
-    if (mtlLoaded) {this.renderScene();}
+    this.renderScene();
 }
+
 var datarefmap = {};
 
+var layer = new maptalks.VectorLayer('vector').addTo(map);
 d3.csv("data/datalog.csv").then(function(data){
 	data.forEach(preprocess);										 
 	var timespan = d3.extent(data,d=>d.dtg);
