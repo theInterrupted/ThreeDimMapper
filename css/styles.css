@@ -9,12 +9,14 @@ html, body, .main-frame {
 
 .timeline {
 	position: absolute;
+	pointer-events: none;
 	left: 20px;
 	right: 20px;
 	z-index: 10;
 }
 
 .timeline svg {
+	pointer-events: auto;
 	background-color: #eee;
 }
 
