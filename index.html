@@ -98,7 +98,7 @@ var threeLayer = new maptalks.ThreeLayer('t', {
     forceRenderOnRotating : true,
 });
 threeLayer.prepareToDraw = function (gl, scene, camera) {
-	//scene.add(new THREE.AmbientLight(0xffffff));// soft white light
+	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
 	
 	var mtlLoader = new THREE.MTLLoader();
 	mtlLoader.load( 'data/aircraft-tractor-smol-smoothed.mtl', function( materials ) {
@@ -113,17 +113,37 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 				  //child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
 				}
 			});
-			var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]));
-			object.position.x = v.x;
-			object.position.y = v.y;
-			object.position.z = v.z;
+			//var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]));
+			//object.position.x = v.x;
+			//object.position.y = v.y;
+			//object.position.z = v.z;
 			
-			scene.add(object);
+			var model=threeLayer.toModel(object,{
+                coordinate:map.getCenter(),
+                altitude:100
+            });
 
-			threeLayer.renderScene();
-			map.setPitch(60);
+            threeLayer.addMesh(model);
+
+            //tooltip test
+            model.setToolTip('obj model', {
+                    showTimeout: 0,
+                    eventsPropagation: true,
+                    dx: 10
+            });
+
+            model.on('mouseover mouseout',function(e){
+               var scale=1;
+               if(e.type==='mouseover'){
+                 scale=1.5;
+               }
+               this.getObject3d().scale.set(1,1,scale);
+            });
 			
             mtlLoaded = true;
+			threeLayer,renderScene();
+			map.setPitch(60);
+			
 		});
 	});
 };
