@@ -90,8 +90,9 @@ var datarefmap = {};
 d3.csv("data/datalog.csv").then(function(data){
 	data.forEach(preprocess);										 
 	var timespan = d3.extent(data,d=>d.dtg);
-	var minDiff = d3.utcMinute.count(timespan[0],timespan[1]) * 0.1;
-	timespan = [d3.utcMinute.offset(timespan[0],-minDiff),d3.utcMinute.offset(timespan[1],minDiff)];
+	//var msDiff = d3.utcMillisecond.count(timespan[0],timespan[1]) * 0.1;
+	//timespan = [d3.utcMillisecond.offset(timespan[0],-msDiff),d3.utcMillisecond.offset(timespan[1],msDiff)];
+	timespan = [d3.utcMillisecond.floor(timespan[0]),d3.utcMillisecond.ceil(timespan[1])];
 	xscale.domain(timespan);
 	yscale.domain(d3.extent(data,d=>d.objectid));
 	
