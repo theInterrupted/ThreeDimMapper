@@ -93,6 +93,7 @@ var mtlLoaded = false;
 var threeLayer = new maptalks.ThreeLayer('t');
 threeLayer.prepareToDraw = function (gl, scene, camera) {
 	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
+	/*
 	var mtlLoader = new THREE.MTLLoader();
 	mtlLoader.setPath( 'data/' );
 	mtlLoader.load( 'aircraft-tractor-smol-smoothed.mtl', function( materials ) {
@@ -102,14 +103,15 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 		//     //change material's side to BackSide
 		//     materials.materials[p].side = THREE.BackSide;
 		// }
+		*/
 		var objLoader = new THREE.OBJLoader();
-		objLoader.setMaterials( materials );
+		//objLoader.setMaterials( materials );
 		objLoader.setPath( 'data/' );
 		objLoader.load( 'aircraft-tractor-smol-smoothed.obj', function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
-				  child.scale.set(.04,.04,.04);
-				  //child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
+				  child.scale.set(.5,.5,.5);
+				  child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
 				}
 			});
 
@@ -138,7 +140,7 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 			threeLayer.renderScene();
 			threeLayer.config('animation',true);
 		});
-	});
+	//});
 };
 threeLayer.draw = function () {
     if (mtlLoaded) {this.renderScene();}
