@@ -37,9 +37,9 @@ var symbols = {
 };
 var dtgParse = d3.utcParse("%Y-%m-%d %H:%M:%S");
 
-const margin = ({top: 10, right: 20, bottom: 20, left: 20});
-const height = 100;
-const width = 400;
+const margin = ({top: 10, right: 10, bottom: 10, left: 10});
+const height = 50;
+const width = 200;
 const dwidth = width - margin.left - margin.right;
 const dheight = height - margin.top - margin.bottom;
 
@@ -88,6 +88,7 @@ var datarefmap = {};
 d3.csv("data/datalog.csv").then(function(data){
 	data.forEach(preprocess);										 
 	var timespan = d3.extent(data,d=>d.dtg);
+	timespan = [d3.utcHour.offset(timespan[0],-1),d3.utcHour.offset(timespan[1],1)];
 	xscale.domain(timespan);
 	yscale.domain(d3.extent(data,d=>d.objectid));
 	
