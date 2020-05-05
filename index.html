@@ -89,6 +89,9 @@ var map = new maptalks.Map('map', {
 
 
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+var mtlLoaded = false;
+
 var threeLayer = new maptalks.ThreeLayer('t', {
     forceRenderOnMoving : true,
     forceRenderOnZooming : true,
@@ -108,8 +111,8 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 		objLoader.load( 'aircraft-tractor-smol-smoothed.obj', function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
-				  child.scale.set(1,1,1);
-				  child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
+				  child.scale.set(.005,.005,.005);
+				  //child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
 				}
 			});
 			var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]));
@@ -120,14 +123,22 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 			scene.add(object);
 
 			threeLayer.renderScene();
+			map.setPitch(60);
+			
+            mtlLoaded = true;
 		});
 	});
 };
 threeLayer.draw = function () {
-    this.renderScene();
+    if (mtlLoaded) {
+        this.renderScene();
+    }
 }
+
 threeLayer.drawOnInteracting = function () {
-    this.renderScene();
+    if (mtlLoaded) {
+        this.renderScene();
+    }
 }
 
 var datarefmap = {};
