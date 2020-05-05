@@ -67,7 +67,7 @@ var yscale = d3.scaleLinear().range([dheight, 0]);
 
 var map = new maptalks.Map('map', {
         center: [-84.22550713006798,39.9001169544084],
-        zoom: 14,
+        zoom: 19,
         zoomControl: {
           'position'  : 'top-right',
           'slider'    : true,
@@ -133,7 +133,7 @@ threeLayer.draw = function () {
 threeLayer.drawOnInteracting = function () {
     this.renderScene();
 }
-/*
+
 var datarefmap = {};
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
@@ -175,7 +175,7 @@ d3.csv("data/datalog.csv").then(function(data){
 	});
 	
 });
-*/
+
 function brushed(){
 	const selection = d3.event.selection;
 	if (selection === null){
