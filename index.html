@@ -91,13 +91,61 @@ var layer = new maptalks.VectorLayer('vector').addTo(map);
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 var mtlLoaded = false;
 var threeLayer = new maptalks.ThreeLayer('t');
+threeLayer.prepareToDraw = function (gl, scene, camera) {
+	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setPath( 'data/' );
+	mtlLoader.load( 'aircraft-tractor-smol-smoothed.mtl', function( materials ) {
+		materials.preload();
+		//change to back side with THREE <= v0.94
+		// for (const p in materials.materials) {
+		//     //change material's side to BackSide
+		//     materials.materials[p].side = THREE.BackSide;
+		// }
+		var objLoader = new THREE.OBJLoader();
+		objLoader.setMaterials( materials );
+		objLoader.setPath( 'data/' );
+		objLoader.load( 'aircraft-tractor-smol-smoothed.obj', function ( object ) {
+			object.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh ) {
+				  child.scale.set(0.04, 0.04, 0.04);
+				  //child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
+				}
+			});
+
+			var model = threeLayer.toModel(object,{
+				coordinate:map.getCenter(),
+				altitude:0
+			});
+
+			threeLayer.addMesh(model);
+
+			//tooltip test
+			model.setToolTip('obj model', {
+					showTimeout: 0,
+					eventsPropagation: true,
+					dx: 10
+			});
+
+			/*model.on('mouseover mouseout',function(e){
+			   var scale=1;
+			   if(e.type==='mouseover'){
+				 scale=1.5;
+			   }
+			   this.getObject3d().scale.set(1,1,scale);
+			});*/
+			mtlLoaded = true;
+			threeLayer.renderScene();
+			threeLayer.config('animation',true);
+		});
+	});
+};
 threeLayer.draw = function () {
     if (mtlLoaded) {this.renderScene();}
 }
 threeLayer.drawOnInteracting = function () {
     if (mtlLoaded) {this.renderScene();}
 }
-
 var datarefmap = {};
 
 d3.csv("data/datalog.csv").then(function(data){
@@ -136,56 +184,6 @@ d3.csv("data/datalog.csv").then(function(data){
 			}
 		  ).addTo(layer);				  
 	});
-
-	threeLayer.prepareToDraw = function (gl, scene, camera) {
-		scene.add(new THREE.AmbientLight(0xffffff));// soft white light
-		var mtlLoader = new THREE.MTLLoader();
-		mtlLoader.setPath( 'data/' );
-		mtlLoader.load( 'aircraft-tractor-smol-smoothed.mtl', function( materials ) {
-			materials.preload();
-			//change to back side with THREE <= v0.94
-			// for (const p in materials.materials) {
-			//     //change material's side to BackSide
-			//     materials.materials[p].side = THREE.BackSide;
-			// }
-			var objLoader = new THREE.OBJLoader();
-			objLoader.setMaterials( materials );
-			objLoader.setPath( 'data/' );
-			objLoader.load( 'aircraft-tractor-smol-smoothed.obj', function ( object ) {
-				object.traverse( function ( child ) {
-					if ( child instanceof THREE.Mesh ) {
-					  child.scale.set(0.04, 0.04, 0.04);
-					  //child.rotation.set(Math.PI * 1 / 2, -Math.PI * 1 / 2, 0);
-					}
-				});
-
-				var model = threeLayer.toModel(object,{
-					coordinate:map.getCenter(),
-					altitude:0
-				});
-
-				threeLayer.addMesh(model);
-
-				//tooltip test
-				model.setToolTip('obj model', {
-						showTimeout: 0,
-						eventsPropagation: true,
-						dx: 10
-				});
-
-				/*model.on('mouseover mouseout',function(e){
-				   var scale=1;
-				   if(e.type==='mouseover'){
-					 scale=1.5;
-				   }
-				   this.getObject3d().scale.set(1,1,scale);
-				});*/
-				mtlLoaded = true;
-				threeLayer.renderScene();
-				threeLayer.config('animation',true);
-			});
-		});
-	};
 	
 });
 
