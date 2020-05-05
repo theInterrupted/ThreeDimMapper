@@ -133,7 +133,7 @@ function brushed(){
 }
 
 function showDataOnlyBetween(start,end){
-	layer.filter(d=>datarefmap[d.getId()]<=start || datarefmap[d.getId()]>=end)
+	layer.filter(d=>datarefmap[d.getId()]<start || datarefmap[d.getId()]>end)
 		.forEach(function(feature) {
             feature.hide();
           });
