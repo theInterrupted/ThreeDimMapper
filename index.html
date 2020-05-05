@@ -47,9 +47,6 @@ const svg = d3.select(".timeline").append("svg")
 	//.attr("viewBox", [0, 0, width, height])
 	.attr("height", height)
 	.attr("width", width);
-const datalayer = svg.append("g")
-	.attr("id", "datalayer")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 const brush = d3.brushX()
 	.extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])
@@ -92,7 +89,6 @@ d3.csv("data/datalog.csv").then(function(data){
 	var timespan = d3.extent(data,d=>d.dtg);
 	var msDiff = d3.utcMillisecond.count(timespan[0],timespan[1]) * 0.1;
 	timespan = [d3.utcMillisecond.offset(timespan[0],-msDiff),d3.utcMillisecond.offset(timespan[1],msDiff)];
-	//timespan = [d3.utcMinute.floor(timespan[0]),d3.utcMinute.ceil(timespan[1])];
 	xscale.domain(timespan);
 	yscale.domain(d3.extent(data,d=>d.objectid));
 	
@@ -100,11 +96,11 @@ d3.csv("data/datalog.csv").then(function(data){
 		.attr("transform", 'translate(' + margin.left + ',' + (height - margin.bottom) + ')')
 		.call(d3.axisBottom(xscale));
 	
-	datalayer.selectAll("circle")
+	svg.selectAll("circle")
 		.data(data)
 		.enter()
 		.append("circle")
-			.attr("transform", d=>'translate(' + xscale(d.dtg) + ',' + yscale(d.objectid) + ')')
+			.attr("transform", d=>'translate(' + (margin.left + xscale(d.dtg)) + ',' + (margin.top + yscale(d.objectid)) + ')')
 			.attr("r", 3.5);
 	
 	data.forEach(function(d){
