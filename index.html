@@ -44,7 +44,9 @@ const dwidth = width - margin.left - margin.right;
 const dheight = height - margin.top - margin.bottom;
 
 const svg = d3.select(".timeline").append("svg")
-	.attr("viewBox", [0, 0, width, height]);
+	//.attr("viewBox", [0, 0, width, height])
+	.attr("height", height)
+	.attr("width", width);
 const datalayer = svg.append("g")
 	.attr("id", "datalayer")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
