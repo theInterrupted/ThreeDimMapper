@@ -9600,4 +9600,3 @@
   typeof console !== 'undefined' && console.log('maptalks.three v0.10.1, requires maptalks@>=0.39.0.');
 
 })));
-//# sourceMappingURL=maptalks.three.js.map
