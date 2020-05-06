@@ -93,11 +93,7 @@ THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
 var mtlLoaded = false;
 
-var threeLayer = new maptalks.ThreeLayer('t', {
-    forceRenderOnMoving : true,
-    forceRenderOnZooming : true,
-    forceRenderOnRotating : true,
-});
+var threeLayer = new maptalks.ThreeLayer('t');
 threeLayer.prepareToDraw = function (gl, scene, camera) {
 	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
 	
@@ -121,7 +117,7 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 			
 			var model=threeLayer.toModel(object,{
                 coordinate:map.getCenter(),
-                altitude:10
+                altitude:100
             });
 
             threeLayer.addMesh(model);
@@ -161,7 +157,7 @@ threeLayer.drawOnInteracting = function () {
 }
 
 threeLayer.addTo(map);
-
+/*
 var datarefmap = {};
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
@@ -203,7 +199,7 @@ d3.csv("data/datalog.csv").then(function(data){
 	});
 	
 });
-
+*/
 function brushed(){
 	const selection = d3.event.selection;
 	if (selection === null){
