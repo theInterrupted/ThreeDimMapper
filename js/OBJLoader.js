@@ -696,7 +696,9 @@ THREE.OBJLoader.prototype = {
 
 				if ( ! material ) {
 
-					material = ( ! isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial() );
+					//material = ( ! isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial() );
+					// Note: in three.js, the ShaderLib for basic stuff doesn't include ambient light definitions
+					material = new THREE.MeshPhongMaterial();
 					material.name = sourceMaterial.name;
 
 				}

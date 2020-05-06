@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.69</title>
+<title>Data-Driven 3D Maps 0.70</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -115,6 +115,7 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 	var mtlLoader = new THREE.MTLLoader();
 	mtlLoader.setPath("");
     mtlLoader.load( 'data/aircraft-tractor-smol-smoothed.mtl', function( materials ) {
+	// if material.lights, find material.shader.uniforms.ambientLightColors
         materials.preload();
 		//let mkeys = d3.keys(materials.materials);
 		//mkeys.forEach(function(k){
@@ -143,7 +144,7 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 
 			threeLayer.addMesh(model);
 			//tooltip test
-			model.setSymbol(new THREE.MeshPhongMaterial());
+			//model.setSymbol(new THREE.MeshPhongMaterial());
 			model.setToolTip('obj model', {
 					showTimeout: 0,
 					eventsPropagation: true,
