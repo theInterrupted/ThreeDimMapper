@@ -686,7 +686,7 @@ THREE.OBJLoader.prototype = {
 					// mtl etc. loaders probably can't create line materials correctly, copy properties to a line material.
 					if ( isLine && material && ! ( material instanceof THREE.LineBasicMaterial ) ) {
 
-						var materialLine = new THREE.LineBasicMaterial();
+						var materialLine = new THREE.MeshPhongMaterial(); //THREE.LineBasicMaterial();
 						materialLine.copy( material );
 						material = materialLine;
 
