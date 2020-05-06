@@ -684,20 +684,20 @@ THREE.OBJLoader.prototype = {
 					material = this.materials.create( sourceMaterial.name );
 
 					// mtl etc. loaders probably can't create line materials correctly, copy properties to a line material.
-					if ( isLine && material && ! ( material instanceof THREE.LineBasicMaterial ) ) {
+					/*if ( isLine && material && ! ( material instanceof THREE.LineBasicMaterial ) ) {
 
-						var materialLine = new THREE.MeshPhongMaterial(); //THREE.LineBasicMaterial();
+						var materialLine = new THREE.LineBasicMaterial();
 						materialLine.copy( material );
 						material = materialLine;
 
-					}
+					}*/
 
 				}
 
 				if ( ! material ) {
 
 					//material = ( ! isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial() );
-					// Note: in three.js, the ShaderLib for basic stuff doesn't include ambient light definitions
+					// Note: in three.js, the ShaderLib for a LineBasicMaterial doesn't include ambient light definitions
 					material = new THREE.MeshPhongMaterial();
 					material.name = sourceMaterial.name;
 
