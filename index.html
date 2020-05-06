@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.83</title>
+<title>Data-Driven 3D Maps 0.84</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -95,11 +95,12 @@ var mtlLoaded = false;
 
 var threeLayer = new maptalks.ThreeLayer('t');
 threeLayer.prepareToDraw = function (gl, scene, camera) {
-	var z = threeLayer.distanceToVector3(100, 100).x;
+	var z = threeLayer.distanceToVector3(200, 200).x;
 	var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]),z);
 
 	scene.add(new THREE.AmbientLight(0xffffff));// soft white light
-	var ptLight = new THREE.PointLight(0xffffff,1,0);
+	ptLight.castShadow = true;
+	var ptLight = new THREE.PointLight(0xffffff,5,0);
 	ptLight.castShadow = true;
 	ptLight.position.set(v.x,v.y,v.z);
 	scene.add(ptLight);
