@@ -711,7 +711,7 @@ THREE.OBJLoader.prototype = {
 
 			var mesh;
 
-			/*if ( createdMaterials.length > 1 ) {
+			if ( createdMaterials.length > 1 ) {
 
 				for ( var mi = 0, miLen = materials.length; mi < miLen ; mi++ ) {
 
@@ -724,9 +724,9 @@ THREE.OBJLoader.prototype = {
 				mesh = ( ! isLine ? new THREE.Mesh( buffergeometry, multiMaterial ) : new THREE.LineSegments( buffergeometry, multiMaterial ) );
 
 			} else {
-			*/
+			
 				mesh = ( ! isLine ? new THREE.Mesh( buffergeometry, createdMaterials[ 0 ] ) : new THREE.LineSegments( buffergeometry, createdMaterials[ 0 ] ) );
-			//}
+			}
 
 			mesh.name = object.name;
 
