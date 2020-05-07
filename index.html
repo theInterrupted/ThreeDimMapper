@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.102</title>
+<title>Data-Driven 3D Maps 0.103</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -173,11 +173,11 @@ function createThreeLayer(){
 	threeLayer.addTo(map);
 }
 
-function modelCheck(threelayer){
+function modelCheck(threeLayer){
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
 		if(!datarefmap[key].model){
-			loadModel(key,threelayer);
+			loadModel(key,threeLayer);
 		} else {
 			if (datarefmap[key].visible){
 				datarefmap[key].model.show();
@@ -188,7 +188,7 @@ function modelCheck(threelayer){
 	});
 }
 
-function loadModel(id, threelayer){
+function loadModel(id, threeLayer){
 	var d = datarefmap[id];
 	var modelObj = modelLib[d.type];
 	if (!modelObj) return;
