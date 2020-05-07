@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.114</title>
+<title>Data-Driven 3D Maps 0.115</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -123,7 +123,7 @@ d3.csv("data/datalog.csv").then(function(data){
 			.attr("r", 3.5);
 	
 	data.forEach(function(d){
-		new maptalks.Marker(
+		d.feature = new maptalks.Marker(
 			[d.lon,d.lat],
 			{
 			  id: d.dataid,
@@ -136,7 +136,8 @@ d3.csv("data/datalog.csv").then(function(data){
 			  drawOnAxis : null,  // force dragging stick on a axis, can be: x, y
 			  symbol : symbols.circle
 			}
-		  ).addTo(layer);				  
+		  );
+		  d.feature.addTo(layer);
 	});
 	
 	createThreeLayer();
@@ -232,6 +233,11 @@ function loadModel(id, threeLayer){
 			   }
 			   this.getObject3d().scale.set(1,1,scale);*/
 			});
+			if (d.visible){
+				model.show();
+			} else {
+				model.hide();
+			}
 			
 			d.model = model;
 			threeLayer.renderScene();
@@ -260,12 +266,16 @@ function showDataOnlyBetween(start,end){
 		if (datarefmap[key].dtg<start || datarefmap[key].dtg>end){
 			datarefmap[key].visible = false;
 			if (datarefmap[key].model) datarefmap[key].model.hide();
+			datarefmap[key].feature.hide();
 		} else {
 			datarefmap[key].visible = true;
 			if (datarefmap[key].model) datarefmap[key].model.show();
+			datarefmap[key].feature.show();
+			
 		}
 	});
 
+	/*
 	layer.filter(d=>!datarefmap[d.getId()].visible)
 		.forEach(function(feature) {
             feature.hide();
@@ -275,6 +285,7 @@ function showDataOnlyBetween(start,end){
 		.forEach(function(feature) {
             feature.show();
           });
+	*/
 }
 
 function preprocess(d){
