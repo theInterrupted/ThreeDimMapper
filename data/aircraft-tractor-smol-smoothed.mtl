@@ -30,6 +30,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd towtractor-diffuse-01.jpg
 
 newmtl black_parts
 Ns 96.078431
