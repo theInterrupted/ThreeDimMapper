@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.100</title>
+<title>Data-Driven 3D Maps 0.99</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -91,13 +91,7 @@ var map = new maptalks.Map('map', {
 
 
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-var modelLib = {
-	"truck":{
-		obj:'aircraft-tractor-smol-smoothed.obj',
-		mtl:'aircraft-tractor-smol-smoothed.mtl',
-		loaded: false
-	}
-};
+
 var mtlLoaded = false;
 
 var threeLayer = new maptalks.ThreeLayer('t');
@@ -112,6 +106,53 @@ threeLayer.prepareToDraw = function (gl, scene, camera) {
 	ptLight.castShadow = true;
 	ptLight.position.set(.8,.8,.3); //(v.x,v.y,v.z);
 	scene.add(ptLight);
+	
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setPath("");
+    mtlLoader.load( 'data/aircraft-tractor-smol-smoothed.mtl', function( materials ) {
+        materials.preload();
+		
+		var objLoader = new THREE.OBJLoader();
+		objLoader.setMaterials(materials);
+		objLoader.load( 'data/aircraft-tractor-smol-smoothed.obj', function ( object ) {
+			object.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh ) {
+				  child.scale.set(.01,.01,.01);
+				  //child.rotation.set(Math.PI * 1 / 2, 0, 0);
+				}
+			});
+			
+			//object.position.x = v.x;
+			//object.position.y = v.y;
+			//object.position.z = v.z;
+			//scene.add(object);
+			
+			var model=threeLayer.toModel(object,{
+				coordinate:map.getCenter(),
+				altitude:0
+			});
+
+			threeLayer.addMesh(model);
+			//tooltip test
+			/*model.setToolTip('obj model', {
+					showTimeout: 0,
+					eventsPropagation: true,
+					dx: 10
+			});*/
+
+			model.on('mouseover mouseout',function(e){
+			   /*var scale=1;
+			   if(e.type==='mouseover'){
+				 scale=1.5;
+			   }
+			   this.getObject3d().scale.set(1,1,scale);*/
+			});
+			
+			threeLayer.renderScene();
+			mtlLoaded = true;
+			
+		});
+	});
 	
 };
 threeLayer.draw = function () {
@@ -132,7 +173,7 @@ var datarefmap = {};
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
 d3.csv("data/datalog.csv").then(function(data){
-	data.forEach(preprocess);
+	data.forEach(preprocess);										 
 	var timespan = d3.extent(data,d=>d.dtg);
 	var msDiff = d3.utcMillisecond.count(timespan[0],timespan[1]) * 0.1;
 	timespan = [d3.utcMillisecond.offset(timespan[0],-msDiff),d3.utcMillisecond.offset(timespan[1],msDiff)];
@@ -170,56 +211,6 @@ d3.csv("data/datalog.csv").then(function(data){
 	
 });
 
-function loadModel(id){
-	var modelObj = modelLib[id];
-	if (!modelObj || (modelObj && modelObj.loaded)) return;
-
-	var mtlLoader = new THREE.MTLLoader();
-	//mtlLoader.setPath("");
-    mtlLoader.load( 'data/' + modelObj.mtl, function( materials ) {
-        materials.preload();
-		
-		var objLoader = new THREE.OBJLoader();
-		objLoader.setMaterials(materials);
-		objLoader.load( 'data/' + modelObj.obj, function ( object ) {
-			object.traverse( function ( child ) {
-				if ( child instanceof THREE.Mesh ) {
-				  child.scale.set(.01,.01,.01);
-				  //child.rotation.set(Math.PI * 1 / 2, 0, 0);
-				}
-			});
-			
-			var model=threeLayer.toModel(object,{
-				coordinate:map.getCenter(),
-				altitude:0
-			});
-
-			threeLayer.addMesh(model);
-			
-			//model.hide();
-			//tooltip test
-			/*model.setToolTip('obj model', {
-					showTimeout: 0,
-					eventsPropagation: true,
-					dx: 10
-			});*/
-
-			model.on('mouseover mouseout',function(e){
-			   /*var scale=1;
-			   if(e.type==='mouseover'){
-				 scale=1.5;
-			   }
-			   this.getObject3d().scale.set(1,1,scale);*/
-			});
-			
-			threeLayer.renderScene();
-			modelObj.loaded = true;
-			mtlLoaded = true;
-			
-		});
-	});
-}
-
 function brushed(){
 	const selection = d3.event.selection;
 	if (selection === null){
@@ -246,7 +237,6 @@ function preprocess(d){
 	d.dtg = dtgParse(d.dtg);
 	d.objectid = +d.objectid;
 	datarefmap[d.dataid] = d.dtg;
-	if (d.type) loadModel(d.type);
 }
 
 </script>
