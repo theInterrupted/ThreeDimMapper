@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.112</title>
+<title>Data-Driven 3D Maps 0.113</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -180,9 +180,7 @@ function createThreeLayer(){
 function modelCheck(threeLayer){
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
-		if(!datarefmap[key].model){
-			loadModel(key,threeLayer);
-		} else {
+		if(datarefmap[key].model){
 			if (datarefmap[key].visible){
 				datarefmap[key].model.show();
 			} else {
@@ -251,7 +249,7 @@ function brushed(){
 	map.getLayers(function(d){
 		return d instanceof maptalks.ThreeLayer;
 	}).forEach(function(d){
-		//modelCheck(d);
+		modelCheck(d);
 		d.renderScene();
 	});
 }
