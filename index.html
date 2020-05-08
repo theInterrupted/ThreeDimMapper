@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.119</title>
+<title>Data-Driven 3D Maps 0.120</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -208,7 +208,7 @@ function loadModel(id, threeLayer){
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
 				  child.scale.set(.01,.01,.01);
-				  child.rotation.set(0, 0, (d.az * Math.PI / 180) - 90);
+				  //child.rotation.set(0, 0, (d.az * Math.PI / 180) - 90);
 				}
 			});
 			
@@ -218,6 +218,7 @@ function loadModel(id, threeLayer){
 				coordinate:new maptalks.Coordinate(d.lon,d.lat),
 				altitude:0
 			});
+			d.model = model;
 
 			threeLayer.addMesh(model);
 			
@@ -237,7 +238,6 @@ function loadModel(id, threeLayer){
 			   this.getObject3d().scale.set(1,1,scale);*/
 			});
 			
-			d.model = model;
 			threeLayer.renderScene();
 		});
 	});
