@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.121</title>
+<title>Data-Driven 3D Maps 0.122</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -101,6 +101,7 @@ var modelLib = {
 };
 var loadedModels = [];
 var mtlLoaded = false;
+var threeLayer;
 var datarefmap = {};
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
@@ -146,7 +147,7 @@ d3.csv("data/datalog.csv").then(function(data){
 });
 
 function createThreeLayer(){
-	var threeLayer = new maptalks.ThreeLayer('t');
+	threeLayer = new maptalks.ThreeLayer('t');
 	threeLayer.prepareToDraw = function (gl, scene, camera) {
 		var z = threeLayer.distanceToVector3(200, 200).x;
 		var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]),z);
@@ -254,6 +255,7 @@ function brushed(){
 		brushband = selection;
 		const [x0,x1] = selection.map(xscale.invert);
 		showDataOnlyBetween(x0,x1);
+		threeLayer.renderScene();
 	}
 	/*
 	map.getLayers(function(d){
