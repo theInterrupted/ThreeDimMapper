@@ -170,12 +170,14 @@ function createThreeLayer(){
 	
 	
 	threeLayer.draw = function () {
+		console.log("draw");
 		if (mtlLoaded) {
 			this.renderScene();
 		}
 	}
 
 	threeLayer.drawOnInteracting = function () {
+		console.log("draw on interacting");
 		if (mtlLoaded) {
 			this.renderScene();
 		}
@@ -254,8 +256,8 @@ function brushed(){
 		brushband = selection;
 		const [x0,x1] = selection.map(xscale.invert);
 		showDataOnlyBetween(x0,x1);
-		threeLayer.draw();
-		threeLayer.renderScene();
+		threeLayer.redraw();
+		//threeLayer.renderScene();
 	}
 	/*
 	map.getLayers(function(d){
