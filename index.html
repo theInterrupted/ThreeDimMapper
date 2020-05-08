@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 1.5</title>
+<title>Data-Driven 3D Maps 1.6</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -23,8 +23,7 @@
 
 <script>
 // TODO:
-// 1. resolve azimuth rotation of objects
-// 2. Why do all hidden models show up when zooming in or out?
+// 1. Why do all hidden models show up when zooming in or out?
 
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -96,6 +95,7 @@ var map = new maptalks.Map('map', {
         })
       });
 
+map.on("zooming zoomstart", function(d){ console.log("zoom"); ));
 
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 var modelLib = {
