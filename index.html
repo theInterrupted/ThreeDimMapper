@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.117</title>
+<title>Data-Driven 3D Maps 0.118</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -173,7 +173,15 @@ function createThreeLayer(){
 	}
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
-		if(!datarefmap[key].model) loadModel(key,threeLayer);
+		//if(!datarefmap[key].model) 
+		loadModel(key,threeLayer);
+		
+		if (datarefmap[key].visible){
+			datarefmap[key].model.show();
+		} else {
+			datarefmap[key].model.hide();
+		}
+		
 	});
 	threeLayer.addTo(map);
 }
@@ -207,7 +215,7 @@ function loadModel(id, threeLayer){
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
 				  child.scale.set(.01,.01,.01);
-				  //child.rotation.set(Math.PI * 1 / 2, 0, 0);
+				  child.rotation.set(0, 0, (d.az * Math.PI / 180) - 90);
 				}
 			});
 			
@@ -233,11 +241,6 @@ function loadModel(id, threeLayer){
 			   }
 			   this.getObject3d().scale.set(1,1,scale);*/
 			});
-			if (d.visible){
-				model.show();
-			} else {
-				model.hide();
-			}
 			
 			d.model = model;
 			threeLayer.renderScene();
@@ -290,7 +293,7 @@ function showDataOnlyBetween(start,end){
 function preprocess(d){
 	d.dtg = dtgParse(d.dtg);
 	d.objectid = +d.objectid;
-	datarefmap[d.dataid] = {visible:false,dtg: d.dtg,type:d.type,lon:d.lon,lat:d.lat};
+	datarefmap[d.dataid] = {visible:false,dtg: d.dtg,type:d.type,lon:d.lon,lat:d.lat,az:d.az};
 }
 
 </script>
