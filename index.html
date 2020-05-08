@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 0.120</title>
+<title>Data-Driven 3D Maps 0.121</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -59,8 +59,10 @@ const datalayer = svg.append("g")
 const brush = d3.brushX()
 	.extent([[0, 0], [dwidth, dheight]])
     .on("start brush end", brushed);
+var brushband = [0,dwidth*.10];
 	
 datalayer.append("g")
+	.attr("id", "data-brush")
     .call(brush);
 //    .call(brush.move, [0, 5].map(x));
 	
@@ -158,6 +160,13 @@ function createThreeLayer(){
 		scene.add(ptLight);
 		mtlLoaded = true;
 	};
+	
+	let dkeys = d3.keys(datarefmap);
+	dkeys.forEach(function(key){
+		//if(!datarefmap[key].model) 
+		loadModel(key,threeLayer);
+	});
+	
 	threeLayer.draw = function () {
 		if (mtlLoaded) {
 			//modelCheck(this);
@@ -171,11 +180,6 @@ function createThreeLayer(){
 			this.renderScene();
 		}
 	}
-	let dkeys = d3.keys(datarefmap);
-	dkeys.forEach(function(key){
-		//if(!datarefmap[key].model) 
-		loadModel(key,threeLayer);
-	});
 	threeLayer.addTo(map);
 }
 
@@ -212,8 +216,6 @@ function loadModel(id, threeLayer){
 				}
 			});
 			
-			object.visible = d.visible;
-			
 			var model=threeLayer.toModel(object,{
 				coordinate:new maptalks.Coordinate(d.lon,d.lat),
 				altitude:0
@@ -239,6 +241,8 @@ function loadModel(id, threeLayer){
 			});
 			
 			threeLayer.renderScene();
+			datalayer.select("#data-brush")
+				.call(brush.move, brushband);
 		});
 	});
 }
@@ -247,42 +251,33 @@ function brushed(){
 	const selection = d3.event.selection;
 	if (selection === null){
 	} else {
+		brushband = selection;
 		const [x0,x1] = selection.map(xscale.invert);
 		showDataOnlyBetween(x0,x1);
 	}
+	/*
 	map.getLayers(function(d){
 		return d instanceof maptalks.ThreeLayer;
 	}).forEach(function(d){
 		modelCheck(d);
 		d.draw();
 	});
+	*/
 }
 
 function showDataOnlyBetween(start,end){
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
-		if (datarefmap[key].dtg<start || datarefmap[key].dtg>end){
-			datarefmap[key].visible = false;
-			if (datarefmap[key].model) datarefmap[key].model.hide();
-			if (datarefmap[key].feature) datarefmap[key].feature.hide();
-		} else {
-			datarefmap[key].visible = true;
+		let v = datarefmap[key].dtg>=start && datarefmap[key].dtg<=end;
+		datarefmap[key].visible = v;
+		if (v){
 			if (datarefmap[key].model) datarefmap[key].model.show();
 			if (datarefmap[key].feature) datarefmap[key].feature.show();
+		} else {
+			if (datarefmap[key].model) datarefmap[key].model.hide();
+			if (datarefmap[key].feature) datarefmap[key].feature.hide();
 		}
 	});
-
-	/*
-	layer.filter(d=>!datarefmap[d.getId()].visible)
-		.forEach(function(feature) {
-            feature.hide();
-          });
-	
-	layer.filter(d=>datarefmap[d.getId()].visible)
-		.forEach(function(feature) {
-            feature.show();
-          });
-	*/
 }
 
 function preprocess(d){
