@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 1.7</title>
+<title>Data-Driven 3D Maps 1.8</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -73,6 +73,11 @@ datalayer.append("g")
 var xscale = d3.scaleUtc().range([0, dwidth]);
 var yscale = d3.scaleLinear().range([dheight, 0]);	
 
+var loadedModels = [];
+var mtlLoaded = false;
+var threeLayer;
+var datarefmap = {};
+
 var map = new maptalks.Map('map', {
         center: poi,
         zoom: 19,
@@ -95,7 +100,7 @@ var map = new maptalks.Map('map', {
         })
       });
 
-map.on("zooming zoomstart", function(d){ console.log("zoom"); });
+map.on("zooming zoomstart", function(){ threeLayer.redraw(); });
 
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 var modelLib = {
@@ -104,10 +109,6 @@ var modelLib = {
 		mtl:'aircraft-tractor-smol-smoothed.mtl'
 	}
 };
-var loadedModels = [];
-var mtlLoaded = false;
-var threeLayer;
-var datarefmap = {};
 
 var layer = new maptalks.VectorLayer('vector').addTo(map);
 d3.csv("data/datalog.csv").then(function(data){
