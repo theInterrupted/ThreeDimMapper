@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 1.27</title>
+<title>Data-Driven 3D Maps 1.28</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -22,6 +22,9 @@
 </div>
 
 <script>
+// NOTE
+// 1. visibility of objects on the ThreeLayer are reset with the map
+//	zoom functionality
 // TODO:
 // 1. Why do all hidden models show up when zooming in or out?
 
@@ -62,7 +65,7 @@ const datalayer = svg.append("g")
 
 const brush = d3.brushX()
 	.extent([[0, 0], [dwidth, dheight]])
-    .on("start brush end", brushed);
+    .on("end", brushed);
 var brushband = [0,dwidth*.10];
 	
 datalayer.append("g")
@@ -100,7 +103,7 @@ var map = new maptalks.Map('map', {
         })
       });
 
-map.on("zoomstart zooming zoomend", refresh);
+map.on("zoomend", refresh);
 
 THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 var modelLib = {
@@ -190,10 +193,14 @@ function createThreeLayer(){
 	threeLayer.addTo(map);
 }
 
+function resetThreeLayer(){
+	map.removeLayer('t');
+}
+
 function loadModel(id, threeLayer){
 	var d = datarefmap[id];
 	var modelObj = modelLib[d.type];
-	if (!modelObj) return;
+	if (!modelObj || !d.visible) return;
 
 	var mtlLoader = new THREE.MTLLoader();
 	//mtlLoader.setPath("");
@@ -257,7 +264,8 @@ function brushed(){
 function refresh(){
 	console.log("Refresh");
 	filterDataByTime(brushband.map(xscale.invert));
-	threeLayer.redraw();
+	resetThreeLayer();
+	createThreeLayer();
 }
 
 function filterDataByTime(timeband = brushband.map(xscale.invert)){
