@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 1.16</title>
+<title>Data-Driven 3D Maps 1.17</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
@@ -189,8 +189,9 @@ function createThreeLayer(){
 	
 	threeLayer.onZoomEnd = function(){
 		if (mtlLoaded) {
+			filterDataByTime();
 			this.redraw();
-			this.renderScene();
+			//this.renderScene();
 		}
 	}
 	
@@ -253,13 +254,13 @@ function brushed(){
 	if (selection === null){
 	} else {
 		brushband = selection;
-		const [x0,x1] = selection.map(xscale.invert);
-		showDataOnlyBetween(x0,x1);
+		//const [x0,x1] = selection.map(xscale.invert);
+		filterDataByTime(selection.map(xscale.invert));
 		threeLayer.redraw();
 	}
 }
 
-function showDataOnlyBetween(start,end){
+function filterDataByTime(timeband = brushband.map(xscale.invert)){
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
 		let v = datarefmap[key].dtg>=start && datarefmap[key].dtg<=end;
