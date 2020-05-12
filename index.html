@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 2.0</title>
+<title>Data-Driven 3D Maps 2.2</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
 <script type="text/javascript" src="js/three.116.js"></script>
@@ -208,6 +208,7 @@ function loadModel(id, threeLayer){
 	var modelObj = modelLib[d.type];
 	if (!modelObj || !d.visible) return;
 	
+	/*
 	var geometry = new THREE.BoxGeometry();
 	var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	var cube = new THREE.Mesh( geometry, material );
@@ -218,6 +219,27 @@ function loadModel(id, threeLayer){
 	});
 	d.model = model;
 	threeLayer.addMesh( model );
+	*/
+	
+	var loader = new THREE.GLTFLoader();
+
+	loader.load( 'data/simple_die.glb', function ( gltf ) {
+
+		//scene.add( gltf.scene );
+		var model=threeLayer.toModel(gltf.mesh,{
+			coordinate:new maptalks.Coordinate(d.lon,d.lat),
+			altitude:0
+		});
+		d.model = model;
+		threeLayer.addMesh( model );
+
+	}, undefined, function ( error ) {
+
+		console.error( error );
+
+	} );
+	
+	
 /*
 	var mtlLoader = new THREE.MTLLoader();
 	//mtlLoader.setPath("");
