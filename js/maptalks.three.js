@@ -9119,7 +9119,7 @@
       raycaster.setFromCamera(mouse, camera); //set linePrecision for THREE.Line
 
       //raycaster.linePrecision = this._getLinePrecision(this.getMap().getResolution()); //.linePrecision deprecated
-	  raycaster.params.Line.threshold = this._getLinePrecision(this.getMap().getResolution());
+	  raycaster.params.Line.threshold = this._getLinePrecision(this.getMap().getResolution()); 
       var children = [],
           hasidentifyChildren = [];
       scene.children.forEach(function (mesh) {
