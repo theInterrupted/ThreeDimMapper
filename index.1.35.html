@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Data-Driven 3D Maps 2.0</title>
+<title>Data-Driven 3D Maps 1.35</title>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script type="text/javascript" src="js/maptalks.v1.0a.5.js"></script>
-<script type="text/javascript" src="js/three.116.js"></script>
+<script type="text/javascript" src="https://unpkg.com/three@0.97.0/build/three.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/maptalks.three@0.10.1/dist/maptalks.three.min.js"></script>
 <script type="text/javascript" src="js/OBJLoader.js"></script>
 <script type="text/javascript" src="js/DDSLoader.js"></script>
@@ -103,7 +103,7 @@ var map = new maptalks.Map('map', {
         })
       });
 
-//THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 var modelLib = {
 	"truck":{
 		obj:'aircraft-tractor-smol-smoothed.obj',
@@ -207,18 +207,7 @@ function loadModel(id, threeLayer){
 	var d = datarefmap[id];
 	var modelObj = modelLib[d.type];
 	if (!modelObj || !d.visible) return;
-	
-	var geometry = new THREE.BoxGeometry();
-	var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	var cube = new THREE.Mesh( geometry, material );
-	
-	var model=threeLayer.toModel(cube,{
-		coordinate:new maptalks.Coordinate(d.lon,d.lat),
-		altitude:0
-	});
-	d.model = model;
-	threeLayer.addMesh( model );
-/*
+
 	var mtlLoader = new THREE.MTLLoader();
 	//mtlLoader.setPath("");
     mtlLoader.load( 'data/' + modelObj.mtl, function( materials ) {
@@ -244,25 +233,25 @@ function loadModel(id, threeLayer){
 			
 			//model.hide();
 			//tooltip test
-			//model.setToolTip('obj model', {
-			//		showTimeout: 0,
-			//		eventsPropagation: true,
-			//		dx: 10
-			//});
+			/*model.setToolTip('obj model', {
+					showTimeout: 0,
+					eventsPropagation: true,
+					dx: 10
+			});*/
 
 			model.on('mouseover mouseout',function(e){
-			   //var scale=1;
-			   //if(e.type==='mouseover'){
-				// scale=1.5;
-			   //}
-			   //this.getObject3d().scale.set(1,1,scale);
+			   /*var scale=1;
+			   if(e.type==='mouseover'){
+				 scale=1.5;
+			   }
+			   this.getObject3d().scale.set(1,1,scale);*/
 			});
 			
 			threeLayer.renderScene();
 			//datalayer.select("#data-brush")
 			//	.call(brush.move, brushband);
 		});
-	});*/
+	});
 }
  
 function brushed(){
