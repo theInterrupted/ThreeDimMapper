@@ -5,7 +5,7 @@
  * @author Takahiro / https://github.com/takahirox
  * @author Don McCurdy / https://www.donmccurdy.com
  */
-
+/*
 import {
 	AnimationClip,
 	Bone,
@@ -68,8 +68,8 @@ import {
 	Vector3,
 	VectorKeyframeTrack,
 	sRGBEncoding
-} from "../../../build/three.module.js";
-
+} from "three.module.js";
+*/
 var GLTFLoader = ( function () {
 
 	function GLTFLoader( manager ) {
