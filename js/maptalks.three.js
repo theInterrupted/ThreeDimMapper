@@ -9118,7 +9118,8 @@
       mouse.y = -(y / height) * 2 + 1;
       raycaster.setFromCamera(mouse, camera); //set linePrecision for THREE.Line
 
-      raycaster.linePrecision = this._getLinePrecision(this.getMap().getResolution());
+		// linePrecision has been depricated and replacted with .params.Line.threshold
+      raycaster.params.Line.threshold = this._getLinePrecision(this.getMap().getResolution());
       var children = [],
           hasidentifyChildren = [];
       scene.children.forEach(function (mesh) {
@@ -9597,7 +9598,6 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-  typeof console !== 'undefined' && console.log('maptalks.three v0.10.1, requires maptalks@>=0.39.0.');
+  //typeof console !== 'undefined' && console.log('maptalks.three v0.10.1, requires maptalks@>=0.39.0.');
 
 })));
-//# sourceMappingURL=maptalks.three.js.map
