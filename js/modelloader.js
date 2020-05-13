@@ -152,9 +152,27 @@ function createThreeLayer(){
 		ptLight.position.set(.8,.8,.3); //(v.x,v.y,v.z);
 		scene.add(ptLight);
 		
+		var loader = new GLTFLoader();
 		let dkeys = d3.keys(datarefmap);
 		dkeys.forEach(function(key){
-			loadModel(key,threeLayer);
+			//loadModel(key,threeLayer);
+
+			loader.load( 'data/simple_die.glb', function ( gltf ) {
+
+				scene.add(gltf.scene);
+				//var model=threeLayer.toModel(gltf.mesh,{
+				//	coordinate:new maptalks.Coordinate(d.lon,d.lat),
+				//	altitude:0
+				//});
+				//d.model = model;
+				//threeLayer.addMesh( model );
+
+			}, undefined, function ( error ) {
+
+				console.error( error );
+
+			} );
+			
 		});
 	
 		mtlLoaded = true;
@@ -202,7 +220,7 @@ function loadModel(id, threeLayer){
 
 	loader.load( 'data/simple_die.glb', function ( gltf ) {
 
-		//scene.add( gltf.scene );
+		scene.add( gltf.scene );
 		var model=threeLayer.toModel(gltf.mesh,{
 			coordinate:new maptalks.Coordinate(d.lon,d.lat),
 			altitude:0
