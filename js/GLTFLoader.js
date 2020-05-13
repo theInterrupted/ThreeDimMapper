@@ -3342,4 +3342,4 @@ var GLTFLoader = ( function () {
 
 } )();
 
-//export { GLTFLoader };
+export { GLTFLoader };
