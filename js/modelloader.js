@@ -156,7 +156,9 @@ function createThreeLayer(){
 		let dkeys = d3.keys(datarefmap);
 		dkeys.forEach(function(key){
 			//loadModel(key,threeLayer);
-
+			var d = datarefmap[id];
+			var modelObj = modelLib[d.type];
+			if (!modelObj || !d.visible) return;
 			loader.load( 'data/simple_die.glb', function ( gltf ) {
 
 				gltf.scene.children.forEach(function(mesh){
