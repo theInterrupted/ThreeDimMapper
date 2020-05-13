@@ -144,12 +144,12 @@ function createThreeLayer(){
 		var z = threeLayer.distanceToVector3(200, 200).x;
 		var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]),z);
 
-		var amLight = new THREE.AmbientLight(0xffffff,1);// soft white light
-		amLight.castShadow = true;
+		var amLight = new THREE.AmbientLight(0xffffff,.55);// soft white light
+		//amLight.castShadow = true;
 		scene.add(amLight);
 		var ptLight = new THREE.DirectionalLight(0xffffff,1);
 		ptLight.castShadow = true;
-		ptLight.position.set(.8,.8,.3); //(v.x,v.y,v.z);
+		ptLight.position.set(.5,.5,.5); //(v.x,v.y,v.z);
 		scene.add(ptLight);
 		
 		var loader = new GLTFLoader();
