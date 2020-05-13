@@ -159,7 +159,17 @@ function createThreeLayer(){
 
 			loader.load( 'data/simple_die.glb', function ( gltf ) {
 
-				scene.add(gltf.scene);
+				gltf.scene.children.forEach(function(mesh){
+					if (mesh.type === "Mesh"){
+						var model=threeLayer.toModel(mesh,{
+							coordinate:new maptalks.Coordinate(d.lon,d.lat),
+							altitude:0
+						});
+						d.model = model;
+						threeLayer.addMesh( model );
+					}
+				});
+				//scene.add(gltf.scene);
 				//var model=threeLayer.toModel(gltf.mesh,{
 				//	coordinate:new maptalks.Coordinate(d.lon,d.lat),
 				//	altitude:0
