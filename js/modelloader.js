@@ -144,7 +144,7 @@ function createThreeLayer(){
 		var z = threeLayer.distanceToVector3(200, 200).x;
 		var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]),z);
 
-		var amLight = new THREE.AmbientLight(0xffffff,0.25);// soft white light
+		var amLight = new THREE.AmbientLight(0xffffff,0.55);// soft white light
 		amLight.castShadow = true;
 		scene.add(amLight);
 		var ptLight = new THREE.DirectionalLight(0xffffff,0.85);
