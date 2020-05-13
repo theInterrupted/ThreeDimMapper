@@ -147,7 +147,7 @@ function createThreeLayer(){
 		var amLight = new THREE.AmbientLight(0xffffff,.8);// soft white light
 		amLight.castShadow = false;
 		scene.add(amLight);
-		var ptLight = new THREE.DirectionalLight(0xffffff,1);
+		var ptLight = new THREE.DirectionalLight(0xffffff,10);
 		ptLight.castShadow = true;
 		ptLight.position.set(.5,.5,.5); //(v.x,v.y,v.z);
 		scene.add(ptLight);
