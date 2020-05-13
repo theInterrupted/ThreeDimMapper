@@ -1,4 +1,4 @@
-import {GLTFLoader} from 'GLTFLoader.js';
+import {GLTFLoader} from './GLTFLoader.js';
 
 // NOTE
 // 1. visibility of objects on the ThreeLayer are reset with the map
