@@ -1,5 +1,6 @@
 import * as THREE from './three.module.js';
-import {GLTFLoader} from './GLTFLoader.js';
+import { GLTFLoader } from './GLTFLoader.js';
+import { RGBELoader } from './RGBELoader.js';
 
 // NOTE
 // 1. visibility of objects on the ThreeLayer are reset with the map
@@ -143,7 +144,11 @@ function createThreeLayer(){
 	threeLayer.prepareToDraw = function (gl, scene, camera) {
 		var z = threeLayer.distanceToVector3(200, 200).x;
 		var v = threeLayer.coordinateToVector3(new maptalks.Coordinate(poi[0], poi[1]),z);
+		
+		var pmremGenerator = new THREE.PMREMGenerator( threeLayer.getThreeRenderer() );
+		pmremGenerator.compileEquirectangularShader();
 
+		/*
 		var amLight = new THREE.AmbientLight(0xffffff,5);// soft white light
 		amLight.castShadow = false;
 		scene.add(amLight);
@@ -151,46 +156,61 @@ function createThreeLayer(){
 		ptLight.castShadow = true;
 		ptLight.position.set(.5,.5,.5); //(v.x,v.y,v.z);
 		scene.add(ptLight);
+		*/
 		
-		var loader = new GLTFLoader();
-		let dkeys = d3.keys(datarefmap);
-		dkeys.forEach(function(key){
-			//loadModel(key,threeLayer);
-			var d = datarefmap[key];
-			var modelObj = modelLib[d.type];
-			if (!modelObj || !d.visible) return;
-			loader.load( 'data/DamagedHelmet.gltf', function ( gltf ) {
+		new RGBELoader()
+			.setDataType( THREE.UnsignedByteType )
+			.setPath( '../images/env/' )
+			.load( 'factory_yard_1k.hdr', function ( texture ) {
 
-				gltf.scene.children.forEach(function(mesh){
-					if (mesh.type === "Mesh"){
-						//mesh.scale.set(.01,.01,.01);
-						mesh.scale.set(.1,.1,.1);
-						mesh.rotation.set(0, 0, (Math.PI/2)-(d.az * Math.PI / 180));
-						var model=threeLayer.toModel(mesh,{
-							coordinate:new maptalks.Coordinate(d.lon,d.lat),
-							altitude:0
+				var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+
+				scene.background = envMap;
+				scene.environment = envMap;
+
+				texture.dispose();
+				pmremGenerator.dispose();
+		
+				var loader = new GLTFLoader();
+				let dkeys = d3.keys(datarefmap);
+				dkeys.forEach(function(key){
+					//loadModel(key,threeLayer);
+					var d = datarefmap[key];
+					var modelObj = modelLib[d.type];
+					if (!modelObj || !d.visible) return;
+					loader.load( 'data/DamagedHelmet.gltf', function ( gltf ) {
+
+						gltf.scene.children.forEach(function(mesh){
+							if (mesh.type === "Mesh"){
+								//mesh.scale.set(.01,.01,.01);
+								mesh.scale.set(.1,.1,.1);
+								mesh.rotation.set(0, 0, (Math.PI/2)-(d.az * Math.PI / 180));
+								var model=threeLayer.toModel(mesh,{
+									coordinate:new maptalks.Coordinate(d.lon,d.lat),
+									altitude:0
+								});
+								d.model = model;
+								threeLayer.addMesh( model );
+							}
 						});
-						d.model = model;
-						threeLayer.addMesh( model );
-					}
+						//scene.add(gltf.scene);
+						//var model=threeLayer.toModel(gltf.mesh,{
+						//	coordinate:new maptalks.Coordinate(d.lon,d.lat),
+						//	altitude:0
+						//});
+						//d.model = model;
+						//threeLayer.addMesh( model );
+
+					}, undefined, function ( error ) {
+
+						console.error( error );
+
+					} );
+					
 				});
-				//scene.add(gltf.scene);
-				//var model=threeLayer.toModel(gltf.mesh,{
-				//	coordinate:new maptalks.Coordinate(d.lon,d.lat),
-				//	altitude:0
-				//});
-				//d.model = model;
-				//threeLayer.addMesh( model );
-
-			}, undefined, function ( error ) {
-
-				console.error( error );
-
-			} );
 			
-		});
-	
-		mtlLoaded = true;
+				mtlLoaded = true;
+			});
 	};
 	
 	
