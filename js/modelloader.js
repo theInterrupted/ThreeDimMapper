@@ -1,7 +1,5 @@
 import * as THREE from './three.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
-import { RGBELoader } from './RGBELoader.js';
-import { HDRCubeTextureLoader } from './HDRCubeTextureLoader.js';
 
 // NOTE
 // 1. visibility of objects on the ThreeLayer are reset with the map
@@ -149,33 +147,10 @@ function createThreeLayer(){
 		var amLight = new THREE.AmbientLight(0xffffff,5);// soft white light
 		amLight.castShadow = false;
 		scene.add(amLight);
-		/*
 		var ptLight = new THREE.DirectionalLight(0xffffff,5);
 		ptLight.castShadow = true;
 		ptLight.position.set(.5,.5,.5); //(v.x,v.y,v.z);
 		scene.add(ptLight);
-		*/
-		
-		var hdrCubeRenderTarget;
-		var hdrUrls = [ 'px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr' ];
-		var hdrCubeMap = new HDRCubeTextureLoader()
-			.setPath( './env/' )
-			.setDataType( THREE.UnsignedByteType )
-			.load( hdrUrls, function () {
-
-				hdrCubeRenderTarget = pmremGenerator.fromCubemap( hdrCubeMap );
-
-				hdrCubeMap.magFilter = THREE.LinearFilter;
-				hdrCubeMap.needsUpdate = true;
-
-			} );
-		var renderer = threeLayer.getRenderer();
-		var pmremGenerator = new THREE.PMREMGenerator( renderer );
-		pmremGenerator.compileCubemapShader();
-		
-		scene.background = hdrCubeMap;
-		renderer.toneMappingExposure = params.exposure;
-		renderer.render( scene, camera );
 		
 		var loader = new GLTFLoader();
 		let dkeys = d3.keys(datarefmap);
