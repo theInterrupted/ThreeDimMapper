@@ -160,7 +160,7 @@ function createThreeLayer(){
 		
 		new RGBELoader()
 			.setDataType( THREE.UnsignedByteType )
-			.setPath( '../images/env/' )
+			.setPath( './env/' )
 			.load( 'factory_yard_1k.hdr', function ( texture ) {
 
 				var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
