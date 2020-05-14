@@ -163,8 +163,8 @@ function createThreeLayer(){
 
 				gltf.scene.children.forEach(function(mesh){
 					if (mesh.type === "Mesh"){
-						//mesh.scale.set(.01,.01,.01);
-						mesh.scale.set(.1,.1,.1);
+						mesh.scale.set(.01,.01,.01);
+						//mesh.scale.set(.1,.1,.1);
 						mesh.rotation.set(0, 0, (Math.PI/2)-(d.az * Math.PI / 180));
 						var model=threeLayer.toModel(mesh,{
 							coordinate:new maptalks.Coordinate(d.lon,d.lat),
