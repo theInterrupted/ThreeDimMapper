@@ -170,6 +170,8 @@ function createThreeLayer(){
 
 				texture.dispose();
 				pmremGenerator.dispose();
+				
+				render();
 		
 				var loader = new GLTFLoader();
 				let dkeys = d3.keys(datarefmap);
