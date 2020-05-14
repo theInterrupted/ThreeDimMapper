@@ -1,6 +1,7 @@
 import * as THREE from './three.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
 import { RGBELoader } from './RGBELoader.js';
+import { HDRCubeTextureLoader } from './HDRCubeTextureLoader.js';
 
 // NOTE
 // 1. visibility of objects on the ThreeLayer are reset with the map
@@ -155,24 +156,26 @@ function createThreeLayer(){
 		scene.add(ptLight);
 		*/
 		
-		var pmremGenerator = new THREE.PMREMGenerator( threeLayer.getThreeRenderer() );
-		pmremGenerator.compileEquirectangularShader();
-		
-		new RGBELoader()
+		var hdrCubeRenderTarget;
+		var hdrUrls = [ 'px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr' ];
+		var hdrCubeMap = new HDRCubeTextureLoader()
+			.setPath( './env/' )
 			.setDataType( THREE.UnsignedByteType )
-			.setPath( 'env/' )
-			.load( 'factory_yard_1k.hdr', function ( texture ) {
+			.load( hdrUrls, function () {
 
-				var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+				hdrCubeRenderTarget = pmremGenerator.fromCubemap( hdrCubeMap );
 
-				scene.background = envMap;
-				scene.environment = envMap;
+				hdrCubeMap.magFilter = THREE.LinearFilter;
+				hdrCubeMap.needsUpdate = true;
 
-				texture.dispose();
-				pmremGenerator.dispose();
-				
-				render();
-		});
+			} );
+		var renderer = threeLayer.getRenderer();
+		var pmremGenerator = new THREE.PMREMGenerator( renderer );
+		pmremGenerator.compileCubemapShader();
+		
+		scene.background = hdrCubeMap;
+		renderer.toneMappingExposure = params.exposure;
+		renderer.render( scene, camera );
 		
 		var loader = new GLTFLoader();
 		let dkeys = d3.keys(datarefmap);
