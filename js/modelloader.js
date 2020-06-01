@@ -152,6 +152,8 @@ function createThreeLayer(){
 		ptLight.position.set(.5,.5,.5); //(v.x,v.y,v.z);
 		scene.add(ptLight);
 		
+		var activeAction;
+		
 		var loader = new GLTFLoader();
 		let dkeys = d3.keys(datarefmap);
 		dkeys.forEach(function(key){
@@ -159,8 +161,9 @@ function createThreeLayer(){
 			var d = datarefmap[key];
 			var modelObj = modelLib[d.type];
 			if (!modelObj || !d.visible) return;
-			loader.load( 'data/simple_die.gltf', function ( gltf ) {
-
+			//loader.load( 'data/simple_die.gltf', function ( gltf ) {
+			loader.load( 'data/combine.idletest.glb', function ( gltf ) {
+				
 				gltf.scene.children.forEach(function(mesh){
 					if (mesh.type === "Mesh"){
 						//mesh.scale.set(.01,.01,.01);
@@ -171,7 +174,11 @@ function createThreeLayer(){
 							altitude:0
 						});
 						d.model = model;
+						
+						var mixer = new THREE.AnimationMixer(gltf.scene);
+						activeAction = mixer.clipAction(gltf.animations[0]);
 						threeLayer.addMesh( model );
+						activeAction.play();
 					}
 				});
 				//scene.add(gltf.scene);
