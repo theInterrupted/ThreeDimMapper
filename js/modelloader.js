@@ -161,8 +161,7 @@ function createThreeLayer(){
 			var d = datarefmap[key];
 			var modelObj = modelLib[d.type];
 			if (!modelObj || !d.visible) return;
-			//loader.load( 'data/simple_die.gltf', function ( gltf ) {
-			loader.load( 'data/combine.idletest.glb', function ( gltf ) {
+			loader.load( 'data/simple_die.glb.gltf', function ( gltf ) {
 				
 				gltf.scene.children.forEach(function(mesh){
 					if (mesh.type === "Mesh"){
