@@ -163,6 +163,16 @@ function createThreeLayer(){
 			if (!modelObj || !d.visible) return;
 			loader.load( 'data/simple_die.glb', function ( gltf ) {
 				
+				var model = gltf.scene;
+				model.scale.set(.3,.3,.3);
+				model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
+				threeLayer.addMesh(model);
+				
+				var mixer = new THREE.AnimationMixer(gltf.scene);
+				activeAction = mixer.clipAction(gltf.animations[0]);
+				activeAction.play();
+				
+				/*
 				gltf.scene.children.forEach(function(mesh){
 					if (mesh.type === "Mesh"){
 						//mesh.scale.set(.01,.01,.01);
@@ -180,6 +190,8 @@ function createThreeLayer(){
 						activeAction.play();
 					}
 				});
+				*/
+				
 				//scene.add(gltf.scene);
 				//var model=threeLayer.toModel(gltf.mesh,{
 				//	coordinate:new maptalks.Coordinate(d.lon,d.lat),
