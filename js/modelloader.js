@@ -53,6 +53,10 @@ datalayer.append("g")
 var xscale = d3.scaleUtc().range([0, dwidth]);
 var yscale = d3.scaleLinear().range([dheight, 0]);	
 
+var clock, gui, mixer, actions, activeAction, previousAction;
+var model, face;
+var api = {state: 'Idle' };
+
 var loadedModels = [];
 var mtlLoaded = false;
 var threeLayer;
@@ -154,6 +158,8 @@ function createThreeLayer(){
 		
 		var activeAction;
 		
+		clock = new THREE.Clock();
+		
 		var loader = new GLTFLoader();
 		let dkeys = d3.keys(datarefmap);
 		dkeys.forEach(function(key){
@@ -163,14 +169,18 @@ function createThreeLayer(){
 			if (!modelObj || !d.visible) return;
 			loader.load( 'data/simple_die.glb', function ( gltf ) {
 				
-				var model = gltf.scene;
+				model = gltf.scene;
+				model.rotation.x = Math.PI / 2;
 				model.scale.set(.3,.3,.3);
 				model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
 				threeLayer.addMesh(model);
 				
-				var mixer = new THREE.AnimationMixer(gltf.scene);
-				activeAction = mixer.clipAction(gltf.animations[0]);
-				activeAction.play();
+				createGUI(model, gltf.animations);
+				animate();
+				
+				//var mixer = new THREE.AnimationMixer(gltf.scene);
+				//activeAction = mixer.clipAction(gltf.animations[0]);
+				//activeAction.play();
 				
 				/*
 				gltf.scene.children.forEach(function(mesh){
@@ -225,6 +235,43 @@ function createThreeLayer(){
 	}
 	
 	threeLayer.addTo(map);
+}
+
+function createGUI(model, animations){
+		var states =['Idle'];
+		gui = new dat.GUI();
+		
+		mixer = new THREE.AnimationMixer(model);
+		
+		actions = {};
+		
+		for (var i = 0; i < animations.length; i++){
+				var clip = animations[i];
+				var action = mixer.clipAction(clip);
+				actions[clip.name] = action;
+		}
+		
+		var statesFolder = gui.addFolder('States');
+		var clipCtrl = statesFolder.add(api, 'state').options(states);
+		clipCtrl.onChange(function() {
+			fadeToAction(api.state, 0.5);
+		});
+		
+		statesFolder.open();
+		
+		activeAction = actions['Idle'];
+		activeAction.play();
+}
+
+function animate(){
+	var dt = clock.getDelta();
+	if (mixer) mixer.update(dt);
+	requestAnimationFrame(animate);
+	stats.update();
+	if (threeLayer._needsUpdate){
+		threeLayer._renderer.clearCanvas();
+		threeLayer.renderScene();
+	}
 }
 
 function resetThreeLayer(){
