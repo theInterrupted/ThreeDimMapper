@@ -238,7 +238,7 @@ function createThreeLayer(){
 }
 
 function createGUI(model, animations){
-		var states =['Idle'];
+		var states =['Action'];
 		gui = new dat.GUI();
 		
 		mixer = new THREE.AnimationMixer(model);
@@ -259,7 +259,7 @@ function createGUI(model, animations){
 		
 		statesFolder.open();
 		
-		activeAction = actions['Idle'];
+		activeAction = actions['Action'];
 		activeAction.play();
 }
 
