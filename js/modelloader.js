@@ -239,7 +239,7 @@ function createThreeLayer(){
 
 function createGUI(model, animations){
 		var states =['Action'];
-		gui = new dat.GUI();
+		//gui = new dat.GUI();
 		
 		mixer = new THREE.AnimationMixer(model);
 		
@@ -251,13 +251,13 @@ function createGUI(model, animations){
 				actions[clip.name] = action;
 		}
 		
-		var statesFolder = gui.addFolder('States');
-		var clipCtrl = statesFolder.add(api, 'state').options(states);
-		clipCtrl.onChange(function() {
-			fadeToAction(api.state, 0.5);
-		});
+		//var statesFolder = gui.addFolder('States');
+		//var clipCtrl = statesFolder.add(api, 'state').options(states);
+		//clipCtrl.onChange(function() {
+		//	fadeToAction(api.state, 0.5);
+		//});
 		
-		statesFolder.open();
+		//statesFolder.open();
 		
 		activeAction = actions['Action'];
 		activeAction.play();
