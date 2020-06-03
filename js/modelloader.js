@@ -267,7 +267,7 @@ function animate(){
 	var dt = clock.getDelta();
 	if (mixer) mixer.update(dt);
 	requestAnimationFrame(animate);
-	stats.update();
+	//stats.update();
 	if (threeLayer._needsUpdate){
 		threeLayer._renderer.clearCanvas();
 		threeLayer.renderScene();
