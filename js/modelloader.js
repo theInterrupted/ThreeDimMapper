@@ -1,12 +1,12 @@
 import * as THREE from './three.module.js';
-import { GLTFLoader } from './GLTFLoader.js';
+//import { GLTFLoader } from './GLTFLoader.js';
 
 // NOTE
 // 1. visibility of objects on the ThreeLayer are reset with the map
 //	zoom functionality
 // TODO:
 // 1. Why do all hidden models show up when zooming in or out?
-const version = 2.41;
+const version = 2.42;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -186,7 +186,7 @@ function addGltf(){
 	clock = new THREE.Clock();
 	stats = new Stats();
 	map.getContainer().appendChild(stats.dom);
-	var loader = new GLTFLoader();
+	var loader = new THREE.GLTFLoader();
 	
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
