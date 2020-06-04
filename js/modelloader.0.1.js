@@ -160,7 +160,69 @@ function createThreeLayer(){
 		scene.add(dirlight);
 		camera.add(new THREE.PointLight("#fff", 4));
 		
-		addGltf();
+		var activeAction;
+		
+		clock = new THREE.Clock();
+		
+		var loader = new GLTFLoader();
+		let dkeys = d3.keys(datarefmap);
+		dkeys.forEach(function(key){
+			//loadModel(key,threeLayer);
+			var d = datarefmap[key];
+			var modelObj = modelLib[d.type];
+			if (!modelObj || !d.visible) return;
+			loader.load( 'data/simple_die.glb', function ( gltf ) {
+				
+				model = gltf.scene;
+				model.rotation.x = Math.PI / 2;
+				model.scale.set(1,1,1);
+				model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
+				threeLayer.addMesh(model);
+				
+				createGUI(model, gltf.animations);
+				animate();
+				
+				//var mixer = new THREE.AnimationMixer(gltf.scene);
+				//activeAction = mixer.clipAction(gltf.animations[0]);
+				//activeAction.play();
+				
+				/*
+				gltf.scene.children.forEach(function(mesh){
+					if (mesh.type === "Mesh"){
+						//mesh.scale.set(.01,.01,.01);
+						mesh.scale.set(.5,.5,.5);
+						mesh.rotation.set(0, 0, (Math.PI/2)-(d.az * Math.PI / 180));
+						var model=threeLayer.toModel(mesh,{
+							coordinate:new maptalks.Coordinate(d.lon,d.lat),
+							altitude:0
+						});
+						d.model = model;
+						
+						var mixer = new THREE.AnimationMixer(gltf.scene);
+						activeAction = mixer.clipAction(gltf.animations[0]);
+						threeLayer.addMesh( model );
+						activeAction.play();
+					}
+				});
+				*/
+				
+				//scene.add(gltf.scene);
+				//var model=threeLayer.toModel(gltf.mesh,{
+				//	coordinate:new maptalks.Coordinate(d.lon,d.lat),
+				//	altitude:0
+				//});
+				//d.model = model;
+				//threeLayer.addMesh( model );
+
+			}, undefined, function ( error ) {
+
+				console.error( error );
+
+			} );
+			
+		});
+	
+		mtlLoaded = true;
 	};
 	
 	
@@ -178,39 +240,6 @@ function createThreeLayer(){
 	
 	threeLayer.addTo(map);
 }
-
-function addGltf(){
-	clock = new THREE.Clock();
-	
-	var loader = new THREE.GLTFLoader();
-	
-	let dkeys = d3.keys(datarefmap);
-	dkeys.forEach(function(key){
-		//loadModel(key,threeLayer);
-		var d = datarefmap[key];
-		var modelObj = modelLib[d.type];
-		if (!modelObj || !d.visible) return;
-		loader.load( 'data/simple_die.glb', function ( gltf ) {
-			
-			model = gltf.scene;
-			model.rotation.x = Math.PI / 2;
-			model.scale.set(1,1,1);
-			model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
-			threeLayer.addMesh(model);
-			
-			createGUI(model, gltf.animations);
-			animate();
-			
-
-		}, undefined, function ( error ) {
-
-			console.error( error );
-
-		} );
-		
-	});
-}
-
 
 function createGUI(model, animations){
 		var states =['Action'];
