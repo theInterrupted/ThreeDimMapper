@@ -194,8 +194,8 @@ function addGltf(){
 			
 			model = gltf.scene;
 			model.rotation.x = Math.PI / 2;
-			model.scale.set(1,1,1);
-			model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
+			model.scale.set(100,100,100);
+			model.position.copy(threeLayer.coordinateToVector3(map.getCenter()));//new maptalks.Coordinate(d.lon,d.lat)));
 			threeLayer.addMesh(model);
 			
 			createGUI(model, gltf.animations);
