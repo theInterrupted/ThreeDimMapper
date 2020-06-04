@@ -182,7 +182,7 @@ function createThreeLayer(){
 function addGltf(){
 	clock = new THREE.Clock();
 	
-	var loader = new THREE.GLTFLoader();
+	var loader = new GLTFLoader();
 	
 	let dkeys = d3.keys(datarefmap);
 	dkeys.forEach(function(key){
