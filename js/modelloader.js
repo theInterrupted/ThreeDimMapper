@@ -1,4 +1,4 @@
-import * as THREE from './three.module.js';
+//import * as THREE from './three.module.js';
 //import { GLTFLoader } from './GLTFLoader.js';
 
 // NOTE
@@ -6,7 +6,7 @@ import * as THREE from './three.module.js';
 //	zoom functionality
 // TODO:
 // 1. Why do all hidden models show up when zooming in or out?
-const version = 2.42;
+const version = 2.43;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
