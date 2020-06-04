@@ -6,6 +6,9 @@ import { GLTFLoader } from './GLTFLoader.js';
 //	zoom functionality
 // TODO:
 // 1. Why do all hidden models show up when zooming in or out?
+const version = 2.38;
+d3.select("title").text("Data-Driven 3D Maps " + version);
+
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
 //const poi = [-0.4654798239437163,51.47182221826093];//London Heathrow
 var symbols = {
@@ -193,7 +196,7 @@ function addGltf(){
 		loader.load( 'data/simple_die.glb', function ( gltf ) {
 			
 			model = gltf.scene;
-			model.rotation.x = Math.PI / 2;
+			//model.rotation.x = Math.PI / 2;
 			model.scale.set(100,100,100);
 			model.position.copy(threeLayer.coordinateToVector3(map.getCenter()));//new maptalks.Coordinate(d.lon,d.lat)));
 			threeLayer.addMesh(model);
