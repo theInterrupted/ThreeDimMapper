@@ -6,7 +6,7 @@ import { GLTFLoader } from './GLTFLoader.js';
 //	zoom functionality
 // TODO:
 // 1. Why do all hidden models show up when zooming in or out?
-const version = 2.39;
+const version = 2.40;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -56,7 +56,7 @@ datalayer.append("g")
 var xscale = d3.scaleUtc().range([0, dwidth]);
 var yscale = d3.scaleLinear().range([dheight, 0]);	
 
-var clock, gui, mixer, actions, activeAction, previousAction;
+var stats, clock, gui, mixer, actions, activeAction, previousAction;
 var model, face;
 var api = {state: 'Idle' };
 
@@ -67,7 +67,7 @@ var datarefmap = {};
 
 var map = new maptalks.Map('map', {
         center: poi,
-        zoom: 19,
+        zoom: 18,
 		pitch: 60,
         zoomControl: {
           'position'  : 'top-right',
@@ -184,7 +184,8 @@ function createThreeLayer(){
 
 function addGltf(){
 	clock = new THREE.Clock();
-	
+	stats = new Stats();
+	map.getContainer().appendChild(stats.dom);
 	var loader = new GLTFLoader();
 	
 	let dkeys = d3.keys(datarefmap);
@@ -217,7 +218,7 @@ function addGltf(){
 
 function createGUI(model, animations){
 		var states =['Action'];
-		//gui = new dat.GUI();
+		gui = new dat.GUI();
 		
 		mixer = new THREE.AnimationMixer(model);
 		
@@ -229,23 +230,37 @@ function createGUI(model, animations){
 				actions[clip.name] = action;
 		}
 		
-		//var statesFolder = gui.addFolder('States');
-		//var clipCtrl = statesFolder.add(api, 'state').options(states);
-		//clipCtrl.onChange(function() {
-		//	fadeToAction(api.state, 0.5);
-		//});
+		var statesFolder = gui.addFolder('States');
+		var clipCtrl = statesFolder.add(api, 'state').options(states);
+		clipCtrl.onChange(function() {
+			fadeToAction(api.state, 0.5);
+		});
 		
-		//statesFolder.open();
+		statesFolder.open();
 		
 		activeAction = actions['Action'];
 		activeAction.play();
+}
+
+function fadeToAction(name,duration){
+	previousAction = activeAction;
+	activeAction = actions[name];
+	if (previousAction !== activeAction){
+		previousAction.fadeOut(duration);
+	}
+	activeAction
+		.reset()
+		.setEffectiveTimeScale(1)
+		.setEffectiveWeight(1)
+		.fadeIn(duration)
+		.play();
 }
 
 function animate(){
 	var dt = clock.getDelta();
 	if (mixer) mixer.update(dt);
 	requestAnimationFrame(animate);
-	//stats.update();
+	stats.update();
 	if (threeLayer._needsUpdate){
 		threeLayer._renderer.clearCanvas();
 		threeLayer.renderScene();
