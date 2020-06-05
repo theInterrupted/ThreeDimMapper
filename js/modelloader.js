@@ -197,7 +197,7 @@ function addGltf(){
 		loader.load( 'data/simple_die.glb', function ( gltf ) {
 			
 			model = gltf.scene;
-			model.rotation.x = Math.PI / 2;
+			//model.rotation.x = Math.PI / 2;
 			model.scale.set(1,1,1);
 			model.position.copy(threeLayer.coordinateToVector3(map.getCenter()));//new maptalks.Coordinate(d.lon,d.lat)));
 			threeLayer.addMesh(model);
