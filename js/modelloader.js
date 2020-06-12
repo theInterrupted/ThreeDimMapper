@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = 3.1;
+const version = 3.2;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -198,8 +198,9 @@ function addGltf(){
 		//loader.load( 'data/simple_die_2_anim.glb', function ( gltf ) {
 			
 			model = gltf.scene;
-			//model.rotation.x = Math.PI / 2;
-			model.scale.set(.01,.01,.01);
+			//model.rotation.x = Math.PI / 2; // maybe not necessary
+			//model.scale.set(.01,.01,.01); // for meter-scale
+			model.scale.set(.1,.1,.1);
 			model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
 			threeLayer.addMesh(model);
 			
@@ -381,7 +382,7 @@ function refresh(){
 function filterDataByTime(timeband = brushband.map(xscale.invert)){
 	let [start,end] = timeband;
 	let dkeys = d3.keys(datarefmap);
-	/*dkeys.forEach(function(key){
+	dkeys.forEach(function(key){
 		let v = datarefmap[key].dtg>=start && datarefmap[key].dtg<=end;
 		datarefmap[key].visible = v;
 		if (v){
@@ -391,7 +392,7 @@ function filterDataByTime(timeband = brushband.map(xscale.invert)){
 			if (datarefmap[key].model) datarefmap[key].model.hide();
 			if (datarefmap[key].feature) datarefmap[key].feature.hide();
 		}
-	});*/
+	});
 }
 
 function preprocess(d){
