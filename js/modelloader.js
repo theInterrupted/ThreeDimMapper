@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = 3.9;
+const version = 3.10;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -200,7 +200,7 @@ function addGltf(){
 			model = gltf.scene;
 			//model.rotation.x = Math.PI / 2; // maybe not necessary
 			//model.scale.set(.01,.01,.01); // for meter-scale
-			model.scale.set(500,500,500);
+			model.scale.set(.05,.05,.05);
 			model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
 			threeLayer.addMesh(model);
 			
