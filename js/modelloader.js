@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = 3.0;
+const version = 3.1;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -381,7 +381,7 @@ function refresh(){
 function filterDataByTime(timeband = brushband.map(xscale.invert)){
 	let [start,end] = timeband;
 	let dkeys = d3.keys(datarefmap);
-	dkeys.forEach(function(key){
+	/*dkeys.forEach(function(key){
 		let v = datarefmap[key].dtg>=start && datarefmap[key].dtg<=end;
 		datarefmap[key].visible = v;
 		if (v){
@@ -391,7 +391,7 @@ function filterDataByTime(timeband = brushband.map(xscale.invert)){
 			if (datarefmap[key].model) datarefmap[key].model.hide();
 			if (datarefmap[key].feature) datarefmap[key].feature.hide();
 		}
-	});
+	});*/
 }
 
 function preprocess(d){
