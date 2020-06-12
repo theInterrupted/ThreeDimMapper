@@ -5,8 +5,8 @@
 // 1. visibility of objects on the ThreeLayer are reset with the map
 //	zoom functionality
 // TODO:
-// 1. Why do all hidden models show up when zooming in or out?
-const version = 2.45;
+
+const version = 3.0;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -194,7 +194,8 @@ function addGltf(){
 		var d = datarefmap[key];
 		var modelObj = modelLib[d.type];
 		if (!modelObj || !d.visible) return;
-		loader.load( 'data/simple_die_2_anim.glb', function ( gltf ) {
+		loader.load('data/bridge-builder-rigged-anim.glb', function( gltf ) {
+		//loader.load( 'data/simple_die_2_anim.glb', function ( gltf ) {
 			
 			model = gltf.scene;
 			//model.rotation.x = Math.PI / 2;
@@ -217,7 +218,8 @@ function addGltf(){
 
 
 function createGUI(model, animations){
-		var states =['Tipsy','Spin'];
+		var states =['OpenUp','ChompChomp'];
+		//var states =['Tipsy','Spin'];
 		gui = new dat.GUI();
 		
 		mixer = new THREE.AnimationMixer(model);
@@ -238,7 +240,8 @@ function createGUI(model, animations){
 		
 		statesFolder.open();
 		
-		activeAction = actions['Tipsy'];
+		activeAction = actions['OpenUp'];
+		//activeAction = actions['Tipsy'];
 		activeAction.play();
 }
 
