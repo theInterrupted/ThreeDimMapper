@@ -194,7 +194,7 @@ function addGltf(){
 		var d = datarefmap[key];
 		var modelObj = modelLib[d.type];
 		if (!modelObj || !d.visible) return;
-		loader.load('data/boulder-rock-test-318.7k-polys.glb', function( gltf ) {
+		loader.load('data/boulder-rock-test-501.2k-polys.glb', function( gltf ) {
 		//loader.load( 'data/simple_die_2_anim.glb', function ( gltf ) {
 			
 			model = gltf.scene;
