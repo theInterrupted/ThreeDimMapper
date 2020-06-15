@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = 3.11;
+const version = 3.12;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -194,13 +194,13 @@ function addGltf(){
 		var d = datarefmap[key];
 		var modelObj = modelLib[d.type];
 		if (!modelObj || !d.visible) return;
-		loader.load('data/bridge-builder-rigged-anim.glb', function( gltf ) {
+		loader.load('data/boulder-rock-test-38.4k-polys.glb', function( gltf ) {
 		//loader.load( 'data/simple_die_2_anim.glb', function ( gltf ) {
 			
 			model = gltf.scene;
 			//model.rotation.x = Math.PI / 2; // maybe not necessary
-			//model.scale.set(.01,.01,.01); // for meter-scale
-			model.scale.set(.05,.05,.05);
+			model.scale.set(.01,.01,.01); // for meter-scale
+			//model.scale.set(.05,.05,.05);
 			model.position.copy(threeLayer.coordinateToVector3(new maptalks.Coordinate(d.lon,d.lat)));
 			threeLayer.addMesh(model);
 			
