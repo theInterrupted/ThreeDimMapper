@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = "3.30";
+const version = "3.31";
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -219,7 +219,7 @@ function addGltf(){
 
 
 function createGUI(model, animations){
-		var states =['ArmatureBounce'];
+		var states =['ArmatureBounce4'];
 		//var states =['Tipsy','Spin'];
 		gui = new dat.GUI();
 		
@@ -241,7 +241,7 @@ function createGUI(model, animations){
 		
 		statesFolder.open();
 		
-		activeAction = actions['ArmatureBounce'];
+		activeAction = actions['ArmatureBounce4'];
 		//activeAction = actions['Tipsy'];
 		activeAction.play();
 }
