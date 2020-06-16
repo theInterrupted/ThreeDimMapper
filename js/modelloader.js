@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = 3.12;
+const version = 3.13;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
@@ -195,7 +195,7 @@ function addGltf(){
 		var modelObj = modelLib[d.type];
 		if (!modelObj || !d.visible) return;
 		loader.load('data/bridge-builder.glb', function( gltf ) {
-		//loader.load( 'data/simple_die_2_anim.glb', function ( gltf ) {
+		//loader.load( 'data/boulder-rock-test-7.8k-polys-rigged.glb', function ( gltf ) {
 			
 			model = gltf.scene;
 			//model.rotation.x = Math.PI / 2; // maybe not necessary
@@ -219,7 +219,7 @@ function addGltf(){
 
 
 function createGUI(model, animations){
-		var states =['OpenUp','ChompChomp'];
+		var states =['ArmatureBounce'];
 		//var states =['Tipsy','Spin'];
 		gui = new dat.GUI();
 		
@@ -241,9 +241,9 @@ function createGUI(model, animations){
 		
 		statesFolder.open();
 		
-		activeAction = actions['OpenUp'];
+		activeAction = actions['ArmatureBounce'];
 		//activeAction = actions['Tipsy'];
-		//activeAction.play();
+		activeAction.play();
 }
 
 function fadeToAction(name,duration){
