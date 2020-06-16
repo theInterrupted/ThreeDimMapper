@@ -6,7 +6,7 @@
 //	zoom functionality
 // TODO:
 
-const version = 3.21;
+const version = 3.22;
 d3.select("title").text("Data-Driven 3D Maps " + version);
 
 const poi = [-84.22550713006798,39.9001169544084];//Dayton Intl Airport
